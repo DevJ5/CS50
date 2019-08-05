@@ -31,6 +31,7 @@ long int inputCreditCardNumber()
         cc = get_long("Number: ");  
     }
     while (cc == 0);
+    
     return cc; 
 }
 
