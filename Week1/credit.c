@@ -1,129 +1,138 @@
 #include <stdio.h>
 #include <cs50.h>
-
-long int inputCreditCardNumber(void);
-bool isValid(long int);
-string typeOfCard(long int);
-int calculateLength(long int);
-int findFirstNumber(long int);
-
+#include <math.h>
+#include <string.h>
+// American Express 15 digits, starts with 34 or 37
+// MasterCard 16 digits, starts with 51, 52, 53, 54, 55
+// Visa 13 and 16 digits, starts with 4
+// Luhns algorithm
+// Requirements:
+// 1) Ask user to input a credit card number
+// 2) As output print to the screen AMEX\n or MASTERCARD\n or VISA\n or INVALID\n
+// 3) No input validation required
+// 4) Use a long integer
+ 
+int getNumberOfDigits(long int cc);
+string getType(long int cc, int numberOfDigits);
+int getStartingDigits(long int cc, int numberOfDigits, int numberOfStartingDigits);
+bool checkSum(long int cc);
+ 
 int main(void)
 {
-    // Ask user to input credit card number
-    long int cc = inputCreditCardNumber();
-    bool valid = isValid(cc);
-    if (!valid)
+    // Ask user to input a credit card number
+    long int cc = get_long("Number: ");
+    
+    // Get the number of digits in the credit card number
+    int numberOfDigits = getNumberOfDigits(cc);
+    string type = getType(cc, numberOfDigits);
+
+    // If there is no type found, print invalid and quit the program
+    if (strcmp(type, "INVALID") == 0)
     {
-        printf("INVALID\n");   
+        printf("INVALID\n");
+        return 0;
+    }
+
+    // The type is valid, we proceed to checking if the actual number is valid
+    bool isValidNumber = checkSum(cc);
+    // If the number is valid print the type, else print invalid
+    isValidNumber ? printf("%s\n", type) : printf("INVALID\n");
+}
+
+int getNumberOfDigits(long int cc)
+{
+    int numberOfDigits = 0;
+    while (cc >= 1)
+    {
+        cc /= 10;
+        numberOfDigits++;
+    }
+    
+    return numberOfDigits;
+}
+
+string getType(long int cc, int numberOfDigits)
+{
+    // American Express if there are 15 digits and it starts with 34 or 37
+    if (numberOfDigits == 15)
+    {
+        int startingDigits = getStartingDigits(cc, numberOfDigits, 2);
+        if (startingDigits == 34 || startingDigits == 37)
+        {
+            return "AMEX";
+        }
+    }
+    
+    // MasterCard if there are 16 digits, and it starts with either 51, 52, 53, 54 or 55
+    if (numberOfDigits == 16)
+    {
+        int startingDigits = getStartingDigits(cc, numberOfDigits, 2);
+        if (startingDigits >= 51 && startingDigits <= 55)
+        {
+            return "MASTERCARD";
+        }
+    }
+
+    // Visa if there are 13 or 16 digits, and it starts with 4
+    if (numberOfDigits == 13 || numberOfDigits == 16)
+    {
+        int startingDigit = getStartingDigits(cc, numberOfDigits, 1);
+        if (startingDigit == 4)
+        {
+            return "VISA";
+        }
+    }
+
+    return "INVALID";
+}
+
+
+
+int getStartingDigits(long int cc, int numberOfDigits, int numberOfStartingDigits)
+{
+    if (numberOfStartingDigits == 1)
+    {
+        return cc / pow(10, numberOfDigits - 1);
+    }
+    else if (numberOfStartingDigits == 2)
+    {
+        return cc / pow(10, numberOfDigits - 2);
     }
     else
     {
-        string type = typeOfCard(cc);
-        printf("%s", type);
-    }  
-}
-
-long int inputCreditCardNumber()
-{
-    long int cc = 0;
-    do
-    {
-        cc = get_long("Number: ");  
+        return 0;
     }
-    while (cc == 0);
-    
-    return cc; 
 }
 
-bool isValid(long int cc)
+bool checkSum(long int cc)
 {
-    // Make a copy of cc number
-    int num = cc;
-    
-    int sum = 0;
-    int digit;
-    
-    // If the length is even, we include the first digit
-    if (num % 2 == 0)
+    int total = 0;
+    bool multiplyByTwo = false;
+    while (cc >= 1)
     {
-        while (num >= 10)
+        int digit = cc % 10;
+        if(multiplyByTwo)
         {
-            // The total sum of every other digit multiplied by two
-            // Ex. 123456 / 10 % 10 = 4; 1234 / 10 % 10 = 3; 123 / 10 % 10 = 2; 12
-            digit = num / 10 % 10;
-            sum += digit * 2;
-            num /= 10;
+            if (digit < 5)
+            {
+                total += digit * 2;
+            }
+            else
+            {
+                // Add the first digit of the product:
+                total += digit * 2 / 10;
+                // Add the second digit of the product:
+                total += digit * 2 % 10; 
+            }
+            multiplyByTwo = false;
         }
-        
-        // Reset num back to cc number
-        num = cc;
-     
-        while (num >= 100)
+        else
         {
-            // Add all the digits that werent multiplied by 2 to the sum
-            digit = num % 10;
-            sum += digit;
-            num /= 10;
+            total += digit;
+            multiplyByTwo = true;
         }
+        cc /= 10;
     }
-    else
-    {
-        while (num >= 100)
-        {
-            digit = num / 10 % 10;
-            sum += digit * 2;
-            num /= 10;
-        }
-        
-        // Reset num back to cc number
-        num = cc;
-        
-        while (num >= 10)
-        {
-            // Add all the digits that werent multiplied by 2 to the sum
-            digit = num % 10;
-            sum += digit;
-            num /= 10;
-        }    
-    }
-    return sum % 10 == 0;
-}
 
-string typeOfCard(long int cc)
-{
-    int length = calculateLength(cc);
-    int firstNumber = findFirstNumber(cc);
-    if (length == 16 && firstNumber != 4)
-    {
-        return "MASTERCARD\n";    
-    }
-    else if (length == 15)
-    {
-        return "AMEX\n";    
-    }
-    else
-    {
-        return "VISA\n";   
-    }
-}
-
-int calculateLength(long int number)
-{
-    int counter = 0;
-    while (number > 0)
-    {
-        number /= 10;
-        counter++;
-    }
-    return counter;
-}
-
-int findFirstNumber(long int number)
-{
-    while (number >= 10)
-    {
-        number /= 10;
-    }
-    
-    return number;
+    return total % 10 == 0;
 }
