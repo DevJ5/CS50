@@ -7,6 +7,7 @@
 // The cyphernumber rotates the characters clockwise
 // Output is a cyphered word/sentence
 // Edge cases: A space in the key, no key, key which is not a number.
+//
 
 bool isValidArgumentCount(int n);
 bool isValidKey(string key);
