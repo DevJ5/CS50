@@ -10,18 +10,19 @@
 // isupper
 // islower
 
+int main(void)
+{
+    // strcat:
+    char greeting[100] = "Hey ";
+    strcat(greeting, "how are you?\n");
+    printf("%s", greeting);
 
-// strcat:
-char greeting[100] = "Hey ";
-strcat(greeting, "how are you?\n");
-printf("%s", greeting);
+    // strcpy:
+    char greeting[50] = "Hi";
+    strcpy(greeting, "Heya");
 
-// strcpy:
-char greeting[50] = "Hi";
-strcpy(greeting, "Heya");
-
-// scanf can't take spaces as input
-// Solution: puts and fgets!
+    // scanf can't take spaces as input
+    // Solution: puts and fgets!
     char greeting[100];
     char name[30];
     char sentence[75] = "";
@@ -35,29 +36,67 @@ strcpy(greeting, "Heya");
     name[strcspn(name, "\n")] = 0;
 
     strcat(sentence, greeting);
-    strcat(sentence,  " ");
+    strcat(sentence, " ");
     strcat(sentence, name);
-
 
     printf("%s", sentence);
 
-// floor and ceil for rounding:
-float float1 = 3.4556766;
-float float2 = 3.2345345;
-floor(float1);
-ceil(float2);
+    // floor and ceil for rounding:
+    float float1 = 3.4556766;
+    float float2 = 3.2345345;
+    floor(float1);
+    ceil(float2);
 
-// Math abs:
-abs(4 - 10) // 6
+    // Math abs:
+    int a = abs(4 - 10); // 6
 
-// Power and Square root:
-pow(2, 3); //  8
-sqrt(64) // 8
+    // Power and Square root:
+    int b = pow(2, 3); //  8
+    int c = sqrt(64);  // 8
 
-// Random numbers:
-srand ( time(NULL)); // Uses the internal clock so we dont get the same random numbers every time.
-for (int i = 0; i < 10; i++)
+    // Random numbers:
+    srand(time(NULL)); // Uses the internal clock so we dont get the same random numbers every time.
+    for (int i = 0; i < 10; i++)
+    {
+        int diceRoll = rand() % 6 + 1;
+        printf("%d\n", diceRoll);
+    }
+
+    // Pointers:
+    int number = 21;
+
+    int *pNumber = &number; // pointer to number
+
+    printf("Address: %p \t Name: %s \t Value: %i \n", pNumber, "number", number);
+    printf("Address: %p \t Name: %s \t Value: %p \n", &pNumber, "number", pNumber); // The pointer also has a memory address
+
+    printf("%i\n", *pNumber); // Dereference the pointer back to the value
+
+    *pNumber = 26;
+    printf("%i\n", number);
+
+    int lotteryNumbers[5] = {2, 43, 54, 23, 32};
+
+    for (int i = 0; i < 5; i++)
+    {
+        printf("lotteryNumbers[%d]: \t %p \t %d \n", i, &lotteryNumbers[i], lotteryNumbers[i]);
+    }
+
+    printf("%i", *lotteryNumbers);
+
+    char name[] = "Bert";
+    printf("%p\n", name);
+    printf("%c\n", *(name + 3));
+    printf("%i\n", *name);
+
+    // We cant set name to something else because it is a pointer constant (use strcpy for that)
+    // We can however make a pointer variable like so and set it to something else:
+    char *name2 = "Ernie";
+    name2 = "Bluebird";
+}
+
+// Returning a pointer:
+char *printName()
 {
-    int diceRoll = rand() % 6 + 1;
-    printf("%d\n", diceRoll);
+    return "Bert";
 }
