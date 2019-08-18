@@ -93,6 +93,21 @@ int main(void)
     // We can however make a pointer variable like so and set it to something else:
     char *name2 = "Ernie";
     name2 = "Bluebird";
+
+    // Pointer is already set to the first element:
+    int numbers[] = {1, 3, 6, 8};
+    int *p = numbers;
+
+    for (; p < &numbers[4]; p++)
+    {
+        printf("%d\n", *p);
+    }
+
+    // Declaring a character array with a pointer, stores this as a constant in the text segment of the applications memory.
+    char *name = "Bert";
+
+    // You cant change this constant
+    name[1] = 'a'; // This gives a write memory access error.
 }
 
 // Returning a pointer:
