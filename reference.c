@@ -21,6 +21,11 @@ int main(void)
     char greeting[50] = "Hi";
     strcpy(greeting, "Heya");
 
+    // strcmp:
+    char name[] = "Bert";
+    char name2[] = "Bert2";
+    strcmp(name, name2 == 0); // Zero, because it compares ascii code differences.
+
     // scanf can't take spaces as input
     // Solution: puts and fgets!
     char greeting[100];
