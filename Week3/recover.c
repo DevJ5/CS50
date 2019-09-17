@@ -1,18 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-int foundFirstJPEG(FILE *inputFile);
-void createJPEG(int counter);
-void writeToFile(FILE *inputFile, FILE *outputFile);
-int checkIsEndOfJPEG(FILE *inputFile);
-int isEndOfFile(FILE *inputFile);
+int foundFirstJPEG(FILE* inputFile);
+void createJPEG(FILE* inputFile, int counter);
+void writeToFile(FILE* inputFile, FILE* outputFile);
+int checkIsEndOfJPEG(FILE* inputFile);
+int isEndOfFile(FILE* inputFile);
+char* getFileName(int counter);
 
 int main(int argc, char *argv[])
 {
     // 1 command line argument, the name of the forensic image                                      [x]
     // error handling for > 1 argument. print to stderr, main returns 1                             [x]
     // if the forensic image cannot be opened for reading, fprintf to stderr, main returns 2        [x]
-    // if using malloc, must be freed                                                               [ ]
+    // if using malloc, must be freed                                                               [x]
 
     // Check if there is 1 command line argument
     if (argc != 2)
@@ -22,7 +24,7 @@ int main(int argc, char *argv[])
     }
 
     // Check if the forensic image can be opened for reading
-    FILE *inputFile = fopen(argv[1], "r");
+    FILE* inputFile = fopen(argv[1], "r");
     if (inputFile == NULL)
     {
         fprintf(stderr, "Usage: ./recover image\n");
@@ -35,14 +37,15 @@ int main(int argc, char *argv[])
     if (foundFirst)
     {
         int counter = 0;
-        while (1)
+        while(1)
         {
-            createJPEG(counter);
+            createJPEG(inputFile, counter);
             counter++;
             if (isEndOfFile(inputFile))
             {
                 break;
             }
+
         }
     }
     else
@@ -51,6 +54,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+
     fclose(inputFile);
 
     return 0;
@@ -58,7 +62,7 @@ int main(int argc, char *argv[])
 
 // --- End of main --- //
 
-int foundFirstJPEG(FILE *inputFile)
+int foundFirstJPEG(FILE* inputFile)
 {
     unsigned char c0 = fgetc(inputFile);
     printf("%ld: %x\n", ftell(inputFile), c0);
@@ -83,7 +87,7 @@ int foundFirstJPEG(FILE *inputFile)
     }
 
     // Return 0 if we reached the end of the file without finding a JPEG
-    if (isEndOfFile(inputFile)
+    if (isEndOfFile(inputFile))
     {
         return 0;
     }
@@ -92,17 +96,15 @@ int foundFirstJPEG(FILE *inputFile)
     return foundFirstJPEG(inputFile);
 }
 
-void createJPEG(int counter)
+void createJPEG(FILE* inputFile, int counter)
 {
     // Create new JPEG file
-    char *strCounter[12] sprintf(strCounter, "%d", counter);
-    char *filename =
-        FILE *outputFile = fopen("000.jpg", "w");
+    FILE* outputFile = fopen(getFileName(counter), "w");
     printf("We write from: %ld\n", ftell(inputFile));
     writeToFile(inputFile, outputFile);
     printf("We are now at: %ld\n", ftell(inputFile));
 
-    while (1)
+    while(1)
     {
         // Check if we reached the end of a JPEG
         if (checkIsEndOfJPEG(inputFile))
@@ -119,7 +121,7 @@ void createJPEG(int counter)
     return;
 }
 
-void writeToFile(FILE *inputFile, FILE *outputFile)
+void writeToFile(FILE* inputFile, FILE* outputFile)
 {
     // Define character block of 512 bytes
     char bytes[512];
@@ -131,7 +133,7 @@ void writeToFile(FILE *inputFile, FILE *outputFile)
     return;
 }
 
-int checkIsEndOfJPEG(FILE *inputFile)
+int checkIsEndOfJPEG(FILE* inputFile)
 {
     unsigned char c0 = fgetc(inputFile);
     if (c0 == 0xff)
@@ -169,7 +171,7 @@ int checkIsEndOfJPEG(FILE *inputFile)
     return 0;
 }
 
-int isEndOfFile(FILE *inputFile)
+int isEndOfFile(FILE* inputFile)
 {
     if (feof(inputFile))
     {
@@ -179,4 +181,33 @@ int isEndOfFile(FILE *inputFile)
     {
         return 0;
     }
+}
+
+char* getFileName(int counter)
+{
+    char *fileName = (char*)malloc(50);
+    char fileExtension[] = ".jpg";
+
+    char temp[12];
+    sprintf(temp, "%d", counter);
+
+    if (counter / 10 == 0)
+    {
+        strcpy(fileName, "00");
+        strcat(fileName, temp);
+    }
+    else if (counter / 10 < 10)
+    {
+        strcpy(fileName, "0");
+        strcat(fileName, temp);
+    }
+    else
+    {
+        sprintf(fileName, "%d", counter);
+    }
+
+    strcat(fileName, fileExtension);
+
+    printf("%s\n", fileName);
+    return fileName;
 }
