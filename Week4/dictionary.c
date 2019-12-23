@@ -52,6 +52,11 @@ bool load(const char *dictionary)
     {
         // Create a new node structure for this word
         node *newNodePtr = malloc(sizeof(node));
+        if (newNodePtr == NULL)
+        {
+            printf("ERROR: Out of memory\n");
+            return 1;
+        }
         // Set the word and the next properties
         strcpy(newNodePtr->word, word);
         newNodePtr->next = NULL;
