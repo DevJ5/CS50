@@ -63,19 +63,11 @@ bool load(const char *dictionary)
         // Hash the word
         int key = hash(word);
 
-        if (hashtable[key] == NULL)
+        if (hashtable[key] != NULL)
         {
-            hashtable[key] = newNodePtr;
+            newNodePtr->next = hashtable[key];
         }
-        else
-        {
-            node *currentPtr = hashtable[key];
-            while (currentPtr->next != NULL)
-            {
-                currentPtr = currentPtr->next;
-            }
-            currentPtr->next = newNodePtr;
-        }
+        hashtable[key] = newNodePtr;
     }
 
     // Close dictionary
