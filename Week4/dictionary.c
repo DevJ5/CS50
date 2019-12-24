@@ -54,7 +54,7 @@ bool load(const char *dictionary)
         node *newNodePtr = malloc(sizeof(node));
         if (newNodePtr == NULL)
         {
-            printf("ERROR: Out of memory\n");
+            printf("Error: Not enough memory");
             return 1;
         }
         // Set the word and the next properties
@@ -109,8 +109,15 @@ unsigned int size(void)
 // Returns true if word is in dictionary else false
 bool check(const char *word)
 {
-    // TODO
-    // 1. Word should be in lowercase
+    // Word should be in lowercase
+    char wordcpy[LENGTH + 1];
+    strcpy(wordcpy, word);
+
+    for (int i = 0; name[i]; i++)
+    {
+        wordcpy[i] = tolower(wordcpy[i]);
+    }
+
     //
     return false;
 }
