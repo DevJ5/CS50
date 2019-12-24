@@ -139,13 +139,27 @@ bool check(const char *word)
         }
     }
 
-    // Word isnt found, return false
+    // Word isn't found, return false
     return false;
 }
 
 // Unloads dictionary from memory, returning true if successful else false
 bool unload(void)
 {
-    // TODO
-    return false;
+    for (int i = 0; i < N; i++)
+    {
+        if (hashtable[i] != NULL)
+        {
+            node *currentNodePtr = hashtable[i];
+            while (currentNodePtr->next != NULL)
+            {
+                node *temp = currentNodePtr;
+                currentNodePtr = currentNodePtr->next;
+                free(temp);
+            }
+            free(currentNodePtr);
+        }
+    }
+
+    return true;
 }
