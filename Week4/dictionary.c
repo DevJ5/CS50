@@ -113,12 +113,33 @@ bool check(const char *word)
     char wordcpy[LENGTH + 1];
     strcpy(wordcpy, word);
 
-    for (int i = 0; name[i]; i++)
+    for (int i = 0; wordcpy[i]; i++)
     {
         wordcpy[i] = tolower(wordcpy[i]);
     }
+    // Get hash
+    int key = hash(wordcpy);
+    if (hashtable[key] != NULL)
+    {
+        node *currentNodePtr = hashtable[key];
+        while (true)
+        {
+            if (strcmp(currentNodePtr->word, wordcpy) == 0)
+            {
+                // Word is found, return true
+                return true;
+            }
+            if (currentNodePtr->next == NULL)
+            {
+                // We are at the last node, break
+                break;
+            }
+            // Set the currentNode to the next node and start loop again
+            currentNodePtr = currentNodePtr->next;
+        }
+    }
 
-    //
+    // Word isnt found, return false
     return false;
 }
 
