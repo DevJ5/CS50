@@ -1,3 +1,6 @@
+from sys import argv
+
+print(argv[1])
 print("Enter a number: ")
 x = int(input())
 print("Enter a number: ")
@@ -20,8 +23,8 @@ else:
 def cough():
     print("cough ", end="")
     if True:
-        a = "*okay*"
-    print(a)
+        a = "   *okay*   "
+    print(a.upper().strip())
 
 
 for i in range(3):
