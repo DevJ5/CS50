@@ -7,7 +7,7 @@ print("Enter a number: ")
 y = int(input())
 print(f"x + y = {x + y}")
 
-print(f"x / y = {x / y:.2f}")  # For flooring division.
+print(f"x / y = {x / y:.2f}")
 print(f"x // y = {x // y}")  # For flooring division.
 
 print("Enter y or n: ")
@@ -21,14 +21,25 @@ else:
 
 
 def cough():
-    print("cough ", end="")
-    if True:
+    print("cough ", end="")  # To negate the newline character, default is end="\n"
+    if not False:  # Using the not keyword
         a = "   *okay*   "
-    print(a.upper().strip())
+    print(a.upper().strip())  # Strip is like trim, removes whitespace.
 
 
-for i in range(3):
+# Can just iterate over a string or a list for that matter.
+for i in "abc":
     cough()
+
+
+def getNames():
+    print("Enter a name: ")
+    student = {"name": input()}
+    student["age"] = input()
+    print(f"Name = {student['name']}, age = {student['age']}")
+
+
+getNames()
 
 # This approach apparantly solves problems:
 # if __name__ == "__main__":
