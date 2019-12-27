@@ -41,6 +41,10 @@ def getNames():
 
 getNames()
 
+# file = open("somefile.txt", r)
+# for line in file:
+#   words.add(line.rstrip("\n"))
+
 # This approach apparantly solves problems:
 # if __name__ == "__main__":
 #    main()
