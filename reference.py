@@ -1,6 +1,6 @@
 from sys import argv
 
-print(argv[1])
+print(argv[0])
 print("Enter a number: ")
 x = int(input())
 print("Enter a number: ")
@@ -41,9 +41,21 @@ def getNames():
 
 getNames()
 
+# Files:
 # file = open("somefile.txt", r)
 # for line in file:
 #   words.add(line.rstrip("\n"))
+
+# List of tuples:
+presidents = [
+    ("George Washington", 1789),
+    ("John Adams", 1797),
+    ("Thomas Jefferson", 1801),
+    ("James Madison", 1809),
+]
+
+for president, year in presidents:
+    print(f"{president} ({year})")
 
 # This approach apparantly solves problems:
 # if __name__ == "__main__":
