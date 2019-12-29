@@ -27,25 +27,29 @@ def crackHash(hash):
     alphabet = string.ascii_lowercase + string.ascii_uppercase
     print(alphabet)
     for letter1 in alphabet:
-        if hash == crypt.crypt(letter1, salt):
-            return letter1
+        password = letter1
+        if hash == hashPassword(password, salt):
+            return password
         for letter2 in alphabet:
             password = letter1 + letter2
-            print(password)
-            if hash == crypt.crypt(password, salt):
-                return letter1
+            if hash == hashPassword(password, salt):
+                return password
             for letter3 in alphabet:
                 password = letter1 + letter2 + letter3
-                if hash == crypt.crypt(password, salt):
+                if hash == hashPassword(password, salt):
                     return password
                 for letter4 in alphabet:
                     password = letter1 + letter2 + letter3 + letter4
-                    if hash == crypt.crypt(password, salt):
+                    if hash == hashPassword(password, salt):
                         return password
                     for letter5 in alphabet:
                         password = letter1 + letter2 + letter3 + letter4 + letter5
-                        if hash == crypt.crypt(password, salt):
+                        if hash == hashPassword(password, salt):
                             return password
+
+
+def hashPassword(password, salt):
+    return crypt.crypt(password, salt)
 
 
 if __name__ == "__main__":
