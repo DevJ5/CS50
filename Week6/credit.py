@@ -1,10 +1,17 @@
 def main():
     # Ask user to input a CC number
     ccNumber = getInputFromUser()
+    # Validate if it has the number of digits in a CC number
     if not isValidAmountOfDigits(ccNumber):
         print("INVALID")
-    if isValidChecksum(ccNumber):
-        print("nice")
+    # Validate if the checksum according to Luhn is correct
+    if not isValidChecksum(ccNumber):
+        print("INVALID")
+    # Get the number of digits in the CC number
+    numberOfDigits = getNumberOfDigits(ccNumber)
+    # Get the type of the CC card and print it out
+    typeOfCard = getTypeOfCard(ccNumber, numberOfDigits)
+    print(typeOfCard)
 
 
 def getInputFromUser():
@@ -46,6 +53,34 @@ def isValidChecksum(ccNumber):
     # Return true if the last digit is a 0
     print(sum)
     return sum % 10 == 0
+
+
+def getNumberOfDigits(ccNumber):
+    totalNumberOfDigits = 0
+    while ccNumber / 10 != 0:
+        ccNumber //= 10
+        totalNumberOfDigits += 1
+
+    return totalNumberOfDigits
+
+
+def getTypeOfCard(ccNumber, numberOfDigits):
+    firstDigit = int(str(ccNumber)[:1])
+    firstTwoDigits = int(str(ccNumber)[:2])
+    cards = ("AMEX", "MASTERCARD", "VISA")
+    masterCardRange = {51, 52, 53, 54, 55}
+
+    # Check for American Express
+    if numberOfDigits == 15 and (firstTwoDigits == 34 or firstTwoDigits == 37):
+        return cards[0]
+    # Check for Mastercard
+    elif numberOfDigits == 16 and firstTwoDigits in masterCardRange:
+        return cards[1]
+    # Check for Visa
+    elif (numberOfDigits == 13 or numberOfDigits == 16) and firstDigit == 4:
+        return cards[2]
+    else:
+        return "INVALID"
 
 
 if __name__ == "__main__":
