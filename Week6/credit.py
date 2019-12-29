@@ -27,7 +27,7 @@ def isValidAmountOfDigits(ccNumber):
 
 
 def isValidChecksum(ccNumber):
-    # 4003600000000014
+    # Example CC: 4003600000000014
     sum = 0
     # Every other digit starting from the second to last digit gets multiplied by two
     isMultiplyByTwo = False
