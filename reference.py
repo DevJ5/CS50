@@ -60,3 +60,9 @@ for president, year in presidents:
 # This approach apparantly solves problems:
 # if __name__ == "__main__":
 #    main()
+
+# -- Creating a Virtual Environment -- #
+# python -m venv project_env
+# . activate
+# pip list
+# deactivate (there is a new shell command created when we activated the environment)
