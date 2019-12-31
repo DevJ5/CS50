@@ -66,3 +66,8 @@ for president, year in presidents:
 # . activate
 # pip list
 # deactivate (there is a new shell command created when we activated the environment)
+
+with open("registered.csv", "r") as file:
+    reader = csv.reader(file)
+    students = list(reader)
+return render_template("registered.html", students=students)
