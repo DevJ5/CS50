@@ -71,3 +71,5 @@ with open("registered.csv", "r") as file:
     reader = csv.reader(file)
     students = list(reader)
 return render_template("registered.html", students=students)
+
+jsonify(words)  # from flask library
