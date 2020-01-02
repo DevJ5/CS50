@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="initial-scale=1, width=device-width">
+    <title>words1</title>
+</head>
+
+<body>
+
+    <input autocomplete="off" autofocus placeholder="Query" type="text">
+
+    <ul></ul>
+
+    <script src="large.js"></script>
+    <script>
+
+        let input = document.querySelector('input');
+        input.onkeyup = function () {
+
+            list = document.querySelector("ul");
+            html = ``
+            if (input.value) {
+                for (word of WORDS) {
+                    if (word.startsWith(input.value)) {
+                        html += `<li>${word}</li>`
+                    }
+                }
+            }
+            list.innerHTML = html
+        }
+
+
+
+    </script>
+
+</body>
+
+</html>

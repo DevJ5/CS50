@@ -1,0 +1,17 @@
+let WORDS = [
+    "a", 
+    "aaa", 
+    "aaas", 
+    "aachen", 
+    "aalborg", 
+    "aalesund", 
+    "aardvark", 
+    "aardvark's", 
+    "aardvarks", 
+    "aardwolf", 
+    "aargau", 
+    "aarhus", 
+    "aaron", 
+    "aaronic", 
+    "aau", 
+];
