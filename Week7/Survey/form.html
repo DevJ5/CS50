@@ -6,54 +6,58 @@
 <h1 class="mb-3">Form</h1>
 
 <!-- http://getbootstrap.com/docs/4.1/components/forms/ -->
-<form action="/form" method="POST">
+<form class="needs-validation" action="/form" method="POST" novalidate>
     <div class="form-group">
         <label for="name">Name:</label>
         <input type="text" class="form-control" id="name" name="name" aria-describedby="nameHelp"
-            placeholder="Enter name">
-        <span class="d-none">Please fill in a name</span>
+            placeholder="Enter name" required>
+        <div class="invalid-feedback">Please choose a username</div>
     </div>
     <div class="form-group">
         <label for="department">Choose department:</label>
-        <select class="form-control" name="department" id="department">
+        <select class="form-control" name="department" id="department" required>
             <option value="" disabled selected>Department</option>
             <option value="marketing">Marketing</option>
             <option value="sales">Sales</option>
             <option value="finance">Finance</option>
             <option value="hr">Hr</option>
         </select>
-        <span class="d-none">Please select a department</span>
+        <div class="invalid-feedback">Please select a department</div>
     </div>
     <div>
         <div class="custom-control custom-radio">
-            <input class="custom-control-input" type="radio" name="gender" value="male" id="male">
+            <input class="custom-control-input" type="radio" name="gender" value="male" id="male" required>
             <label class="custom-control-label" for="male">Male</label>
         </div>
         <div class="custom-control custom-radio">
-            <input type="radio" name="gender" value="female" id="female" class="custom-control-input">
+            <input type="radio" name="gender" value="female" id="female" class="custom-control-input" required>
             <label class="custom-control-label" for="female">Female</label><br>
-            <span class="d-none">Please select a gender</span>
         </div>
-
+        <div class="invalid-feedback">Please select a gender</div>
     </div>
 
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 
-
 <script>
-    formEl = document.querySelector("form");
-    formEl.addEventListener("submit", (e) => {
-        e.preventDefault();
-        // Simple client validation:
-        if (document.querySelector("input[name='name']").value.trim() === "")
-            document.querySelector("input[name='name']+span").classList.toggle("d-none")
-        else if (document.querySelector("select[name='department']").value.trim() === "")
-            document.querySelector("select[name='department']+span").classList.toggle("d-none")
-        else if (!document.querySelector("input[value='male']").checked &&
-            !document.querySelector("input[value='female']").checked)
-            document.querySelector("input[value='female']~span").classList.toggle("d-none")
-    });
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
 </script>
 
 {% endblock %}
