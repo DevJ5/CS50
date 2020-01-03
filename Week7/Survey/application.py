@@ -31,9 +31,36 @@ def get_form():
 
 @app.route("/form", methods=["POST"])
 def post_form():
-    return render_template("error.html", message="TODO")
+    name = request.form.get("name")
+    department = request.form.get("department")
+    gender = request.form.get("gender")
+
+    with open("survey.csv", "a", newline="") as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow([name, department, gender])
+
+    return redirect("sheet")
 
 
 @app.route("/sheet", methods=["GET"])
 def get_sheet():
-    return render_template("error.html", message="TODO")
+    with open("survey.csv", newline="") as csvfile:
+        reader = csv.DictReader(csvfile, ["name", "department", "gender"])
+        data = []
+        for row in reader:
+            print(f"Row: === {row}")
+            data.append(row)
+
+    return render_template("sheet.html", len=len(data), data=data)
+
+
+@app.route("/employees", methods=["GET"])
+def get_data():
+    with open("survey.csv", newline="") as csvfile:
+        reader = csv.DictReader(csvfile, ["name", "department", "gender"])
+        data = []
+        for row in reader:
+            print(f"Row: === {row}")
+            data.append(row)
+
+    return jsonify(data)

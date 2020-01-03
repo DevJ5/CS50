@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block main %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Department</th>
+            <th scope="col">Gender</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Server generated with ginja -->
+        <!--{%for employee in range(0, len)%}-->
+        <!--<tr>-->
+        <!--  <th scope="row">{{employee+1}}</th>-->
+        <!--  <td>{{data[employee]['name']}}</td>-->
+        <!--  <td>{{data[employee]['department']}}</td>-->
+        <!--  <td>{{data[employee]['gender']}}</td>-->
+        <!--</tr>-->
+        <!--{%endfor%}-->
+    </tbody>
+</table>
+<!-- Client side generated -->
+<script src="{{ url_for('static', filename = 'employees.js') }}"></script>
+{% endblock %}
