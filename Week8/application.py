@@ -32,7 +32,8 @@ app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 # Session(app)
-app.secret_key = b'A'
+app.secret_key = 'the random string'
+
 
 # Configure CS50 Library to use SQLite database
 # db = SQL("sqlite:///finance.db")
@@ -43,7 +44,7 @@ cur = conn.cursor()
 if not os.environ.get("API_KEY"):
     raise RuntimeError("API_KEY not set")
 
-
+# Routes:
 @app.route("/")
 @login_required
 def index():
@@ -55,7 +56,40 @@ def index():
 @login_required
 def buy():
     """Buy shares of stock"""
-    return apology("TODO")
+    if request.method == 'POST':
+        # Check if the number of shares is valid
+        try:
+            numberOfShares = int(request.form.get("shares"))
+            if numberOfShares < 0:
+                raise ValueError
+        except ValueError:
+            return apology("Thats not a valid number of shares.")
+
+        # Check if the symbol is valid
+        symbol = request.form.get("symbol").strip()
+        quote = lookup(symbol)
+        if symbol == "" or quote == None:
+            return apology("Enter a valid stock symbol.")
+
+        # Calculate total price
+        totalPrice = quote.get('price') * numberOfShares
+
+        # Check for sufficient funds
+        userId = session["user_id"]
+        row = cur.execute("SELECT cash FROM users WHERE users.id =?", (userId,)).fetchone()
+        cash = row[0]
+        cashLeft = cash - totalPrice
+        if cashLeft < 0:
+            return apology("Insufficient funds.")
+
+        # Insert purchase into database
+        cur.execute("INSERT INTO purchases (name, price, amount, user_id, symbol) values(?, ?, ?, ?, ?)",
+            (quote['name'], quote['price'], numberOfShares, userId, quote['symbol']))
+        cur.execute("UPDATE users SET cash =? WHERE users.id =?", (cashLeft, userId,))
+        conn.commit()
+        return render_template('quote.html')
+    else:
+        return render_template('buy.html')
 
 
 @app.route("/check", methods=["GET"])
